@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ApiSearch } from 'services/API';
 import MovieList from "components/MovieList/MovieList"
-import { ImSearch } from 'react-icons/im';
+import { IconContext } from "react-icons";
+import { FaSearch } from "react-icons/fa";
+import { SearchContainer, Input, Button } from './Movies.styled';
 
 const Movies = () => {
     const [movies, setMovies] = useState([]);
@@ -29,18 +31,18 @@ const Movies = () => {
 
     return (
         <>
-            <form onSubmit={handleSubmit}>
-                <input
+            <SearchContainer onSubmit={handleSubmit}>
+                <Input
                     type="text"
                     name="query"
                     placeholder="Search movies"
                 />
-                <button type="submit">
-                    <span>
-                        <ImSearch style={{ marginRight: 5 }} />
-                    </span>
-                </button>
-            </form>
+                <Button type="submit">
+                    <IconContext.Provider value={{ verticalAlign: 'middle', size: 25 }}>
+                        <FaSearch />
+                    </IconContext.Provider>
+                </Button>
+            </SearchContainer>
             <MovieList movies={movies} />
         </>
     );

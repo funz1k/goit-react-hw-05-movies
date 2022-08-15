@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useParams, Link, Outlet } from 'react-router-dom';
+import { useLocation, useParams, Outlet } from 'react-router-dom';
 import { ApiDetails } from 'services/API';
 import { ImArrowLeft } from 'react-icons/im';
-import defaultImg from '../../images/avatar.png';
+import defaultImg from 'images/avatar.png';
+import { CardContainer, ImageContainer, InfoContainer, AdditionalInfoContainer, Button, Image, Title, Description, FilmTitle, GenresList, GenreItem, InfoLink } from './MovieDetails.styled';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
@@ -21,50 +22,43 @@ const MovieDetails = () => {
   return (
     <>
       {film && (
-        <div>
-          <Link to={backLinkHref}>
-            <span>
-              <ImArrowLeft style={{ marginRight: 8 }} />
-            </span>
-            Go back
-          </Link>
-          <div >
-            <img
+        <CardContainer >
+          <ImageContainer>
+            <Button to={backLinkHref}>
+              <ImArrowLeft style={{ marginRight: 8, verticalAlign: 'middle' }} />
+              Go back
+            </Button>
+            <Image
               src={film.poster_path ? poster : defaultImg}
               alt=""
-              width={300}
+              width={400}
             />
-            <div>
-              <h2>{film.title}</h2>
-              <h3>Overview</h3>
-              <p>{film.overview}</p>
-              <span>User Score: {Math.round(film.vote_average * 10)} %</span>
-              <h3>Genres</h3>
-              <ul>
-                {film?.genres?.map(({ id, name }) => (
-                  <li key={id}>{name}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
+          </ImageContainer>
+          <InfoContainer>
+            <FilmTitle>{film.title}</FilmTitle>
+            <Title>Overview</Title>
+            <Description>{film.overview}</Description>
+            <Description>User Score: {Math.round(film.vote_average * 10)} %</Description>
+            <Title>Genres:</Title>
+            <GenresList>
+              {film?.genres?.map(({ id, name }) => (
+                <GenreItem key={id}>{name}</GenreItem>
+              ))}
+            </GenresList>
+          </InfoContainer>
+        </CardContainer>
+      )}
+      <AdditionalInfoContainer >
+        <Title>Additional information</Title>
+        <InfoLink to="cast" state={{ from: `/movies${query}` }}>
+          Cast
+        </InfoLink>
+        <InfoLink to="reviews" state={{ from: `/movies${query}` }}>
+          Reviews
+        </InfoLink>
+      </AdditionalInfoContainer>
+      <Outlet />
 
-          <ul >
-            Additional information
-            <li>
-              <Link to="cast" state={{ from: `/movies${query}` }}>
-                Cast
-              </Link>
-            </li>
-            <li>
-              <Link to="reviews" state={{ from: `/movies${query}` }}>
-                Reviews
-              </Link>
-            </li>
-          </ul>
-          <Outlet />
-        </div>
-      )
-      }
     </>
   );
 };

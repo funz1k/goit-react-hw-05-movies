@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ApiCast } from 'services/API';
 import defaultImg from 'images/avatar.png';
+import { Container, CastList, CastItem, CastInfo } from './Cast.styled';
 
 const Cast = () => {
     const { movieId } = useParams();
@@ -12,12 +13,11 @@ const Cast = () => {
     }, [movieId]);
 
     return (
-        <>
+        <Container>
             {cast && (
-                <div>
+                <CastList>
                     {cast.map(({ id, name, profile_path, character }) => (
-                        <div key={id}>
-                            <p>{name}</p>
+                        <CastItem key={id}>
                             <img
                                 src={
                                     profile_path
@@ -27,12 +27,13 @@ const Cast = () => {
                                 alt={name}
                                 width={150}
                             />
-                            <p>Charecter: {character}</p>
-                        </div>
+                            <CastInfo>{name}</CastInfo>
+                            <CastInfo>Charecter: {character}</CastInfo>
+                        </CastItem>
                     ))}
-                </div>
+                </CastList>
             )}
-        </>
+        </Container>
     );
 };
 

@@ -1,6 +1,7 @@
 import { Api } from "services/API";
 import { useState, useEffect } from "react";
 import MovieList from "components/MovieList/MovieList"
+import { Title } from "./Home.styled";
 
 const Home = () => {
     const [movies, setMovies] = useState([])
@@ -11,16 +12,9 @@ const Home = () => {
 
     return (
         <>
-            <h2>Trending movies</h2>
+            <Title>Trending movies</Title>
             <MovieList movies={movies} />
         </>
-        // <ul>
-        //     {movies?.map(({ id, title }) => (
-        //         <li key={id}>
-        //             <Link to={`/movies/${id}`}>{title}</Link>
-        //         </li>
-        //     ))}
-        // </ul>
     )
 }
 

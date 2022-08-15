@@ -1,25 +1,25 @@
-import { NavLink } from 'react-router-dom';
+import { NavContainer, NavLinkStyled, NavItem } from './Navigation.styled';
 
 const Navigation = () => {
     return (
-        <header>
-            <span>
-                <NavLink
+        <NavContainer>
+            <NavItem>
+                <NavLinkStyled
                     className={({ isActive }) => (isActive ? 'activeNavLink' : 'NavLink')}
                     to="/"
                 >
                     Home
-                </NavLink>
-            </span>
-            <span>
-                <NavLink
+                </NavLinkStyled>
+            </NavItem>
+            <NavItem>
+                <NavLinkStyled
                     className={({ isActive }) => (isActive ? 'activeNavLink' : 'NavLink')}
                     to="/movies"
                 >
                     Movies
-                </NavLink>
-            </span>
-        </header>
+                </NavLinkStyled>
+            </NavItem>
+        </NavContainer>
     );
 };
 
