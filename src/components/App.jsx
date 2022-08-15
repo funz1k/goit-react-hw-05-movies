@@ -1,58 +1,29 @@
-import { useState } from 'react';
-import { nanoid } from 'nanoid';
-import Container from './Container';
-import AppContainer from './AppContainer';
-import ContactsForm from "./ContactsForm";
-import ContactList from './ContactList';
-import ContactsFilter from './ContactsFilter';
-import useLocalStorage from "../hooks/useLocalStorage";
-import contactsData from '../data/contacts.json'
+import { lazy, Suspense } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Navigation from './Navigation/Navigation';
 
+const Home = lazy(() => import('./Home/Home'));
+const Movies = lazy(() => import('./Movies/Movies'));
+const MovieDetails = lazy(() => import('./MovieDetails/MovieDetails'));
+const Reviews = lazy(() => import('./Reviews/Reviews'));
+const Cast = lazy(() => import('./Cast/Cast'));
 
 const App = () => {
-  const [contacts, setContacts] = useLocalStorage('contacts', contactsData);
-  const [filter, setFilter] = useState('');
-
-  const addContact = (name, number) => {
-    const contact = {
-      id: nanoid(),
-      name,
-      number,
-    }
-    const findContact = contacts.find(contact =>
-      contact.name.toLowerCase().includes(name.toLowerCase())
-    );
-
-    findContact
-      ? alert('This name is already in contact')
-      : setContacts(state => [contact, ...state]);
-  }
-
-  const removeContact = id => {
-    setContacts(state => state.filter(contact => contact.id !== id))
-  }
-
-  const onFilterContact = e => {
-    const { value } = e.currentTarget;
-
-    setFilter(value)
-  }
-
-  const normalizeFilter = filter.toLowerCase();
-  const visibleContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(normalizeFilter)
-  );
-
   return (
-    <AppContainer title="Phonebook">
-      <Container title='Add Contacts:'>
-        <ContactsForm onSubmit={addContact} />
-      </Container>
-      <Container title='Contacts:'>
-        <ContactsFilter filter={filter} onChange={onFilterContact} />
-        <ContactList contacts={visibleContacts} removeContact={removeContact} />
-      </Container>
-    </AppContainer>
+    <>
+      <Navigation />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/movies/:movieId" element={<MovieDetails />}>
+            <Route path="cast" element={<Cast />} />
+            <Route path="reviews" element={<Reviews />} />
+          </Route>
+          <Route path="/movies" element={<Movies />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Suspense>
+    </>
   );
 }
 
